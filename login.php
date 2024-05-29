@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         body {
@@ -83,21 +84,27 @@
     <form method="post" action="login.php" class="center"> <!--invia dati tramite POST a login.php -->
         <h4> EMAIL: </h4> <input type="email" name="email"> <!-- Campo per inserire l'email -->
         <h4> PASSWORD: </h4> <input type="password" name="password"><br><br> <!-- Campo per inserire la password -->
-        <input type="submit" value="INVIA I TUOI DATI">   <!-- Pulsante per inviare i dati del form -->
+        <input type="submit" value="INVIA I TUOI DATI"> <!-- Pulsante per inviare i dati del form -->
     </form>
     <p>NUOVO ACCOUNT?</p>
     <a href="register.php" class="button">REGISTRATI</a> <!-- Link alla pagina di registrazione -->
     <?php
     session_start(); //avvia sessione
-//GESTIONE DELLA DISCONNESIONE UTENTE
+    //GESTIONE DELLA DISCONNESIONE UTENTE
     if (isset($_GET['logout'])) //controlla se l'utente vuole disconnettersi
-    {  
+    {
         session_destroy(); //termina sessione
         header("Location: login.php"); //reidirizza alla pagina login
         exit; //ferma l'esecuzione dello script
     }
-//AUTENTICAZIONE UTENTE
+    //AUTENTICAZIONE UTENTE
     $file = 'user.json'; //file che contine  i dati degli utenti
+    // Localhost: indirizzo locale
+    // root: utente default del DB (per ora non modificato)
+    // password è vuota ""
+    // ecommerce-nieddu è il nome del database
+    $db = new mysqli("localhost", "root", "", "ecommerce-nieddu");
+
 
     if (file_exists($file)) //controlla se il file esiste 
     {
@@ -122,4 +129,5 @@
     }
     ?>
 </body>
+
 </html>
