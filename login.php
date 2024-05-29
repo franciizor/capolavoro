@@ -97,35 +97,72 @@
         header("Location: login.php"); //reidirizza alla pagina login
         exit; //ferma l'esecuzione dello script
     }
-    //AUTENTICAZIONE UTENTE
-    $file = 'user.json'; //file che contine  i dati degli utenti
+
     // Localhost: indirizzo locale
     // root: utente default del DB (per ora non modificato)
     // password è vuota ""
     // ecommerce-nieddu è il nome del database
-    $db = new mysqli("localhost", "root", "", "ecommerce-nieddu");
+    $db = new mysqli("localhost", "root", "");
+
+    // Controlla la connessione
+    if ($db->connect_error) {
+        die("Connessione fallita: " . $db->connect_error);
+    }
 
 
-    if (file_exists($file)) //controlla se il file esiste 
-    {
-        $json = file_get_contents($file); //legge il contenuto del file
-        $elementi = json_decode($json, true); //decodifica il contenuto JSON 
-        if (isset($_POST['email']) && isset($_POST['password'])) //controlla se email e password sono stati inviati
-        {
-            $email = $_POST['email']; //prende l'email inviata
-            $password = $_POST['password']; //prende la password inviata
-            foreach ($elementi as $elemento) { //controlla ogni utente registrato nel file JSON
-                if ($elemento['email'] == $email && $elemento['password'] == $password) //controlla se email e password coincidono 
-                {
-                    session_start(); //avvia una sessione
-                    $_SESSION['email'] = $email; //salva l'email nella sessione
-                    $_SESSION['carrello'] = []; //inizializza il carello vuoto
-                    header("Location: profile.php"); //reidirizza alla pagina profile.php
-                    exit;
-                }
+    // Leggi il contenuto del file SQL
+    $sqlContent = file_get_contents('db.sql');
+
+    if ($sqlContent === false) {
+        die("Errore nella lettura del file SQL.");
+    }
+
+    // Esegui tutte le query usando multi_query
+    if ($db->multi_query($sqlContent)) {
+        do {
+            // Questo ciclo processa tutti i risultati delle query
+            if ($result = $db->store_result()) {
+                $result->free();
             }
-            echo "Errore: email e/o password errati";
+        } while ($db->more_results() && $db->next_result());
+        echo "Il database è stato creato con successo.";
+    } else {
+        echo "Errore nell'esecuzione delle query: " . $db->error;
+    }
+
+    // Seleziona il database 'ecommerce-nieddu'
+    if (!$db->select_db("ecommerce-nieddu")) {
+        die("Selezione del database fallita: " . $db->error);
+    }
+    // Query per ottenere i dati dalla tabella 'user'
+    $sql = "SELECT * FROM user";
+    $result = $db->query($sql);
+
+    // Creazione di un array per contenere i dati
+    $elementi = array();
+
+    if ($result->num_rows > 0) {
+
+        // Itera attraverso i risultati e aggiungili all'array
+        while ($row = $result->fetch_assoc()) {
+            $elementi[] = $row;
         }
+    }
+    if (isset($_POST['email']) && isset($_POST['password'])) //controlla se email e password sono stati inviati
+    {
+        $email = $_POST['e-mail']; //prende l'email inviata
+        $password = $_POST['password']; //prende la password inviata
+        foreach ($elementi as $elemento) { //controlla ogni utente registrato nel file JSON
+            if ($elemento['email'] == $email && $elemento['password'] == $password) //controlla se email e password coincidono 
+            {
+                session_start(); //avvia una sessione
+                $_SESSION['email'] = $email; //salva l'email nella sessione
+                $_SESSION['carrello'] = []; //inizializza il carello vuoto
+                header("Location: profile.php"); //reidirizza alla pagina profile.php
+                exit;
+            }
+        }
+        echo "Errore: email e/o password errati";
     }
     ?>
 </body>

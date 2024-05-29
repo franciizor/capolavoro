@@ -90,21 +90,57 @@
     <?php
     if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['email']) && isset($_POST['password'])) //controlla se nome, cognome,email e password sono stati inviati
     {
-        $elemento['nome'] = $_POST['nome'];//prende nome inviata
-        $elemento['cognome'] = $_POST['cognome'];//prende cognome inviata
-        $elemento['email'] = $_POST['email'];//prende l'email inviata
-        $elemento['password'] = $_POST['password'];//prende la password inviata
+        $db = new mysqli("localhost", "root", "");
 
-        $elementi = []; //inizializza un array per contenere gli elementi
-        if (file_exists('user.json')) //controlla se il file esiste 
-        {
-            $json = file_get_contents('user.json');//legge il contenuto del file
-            $elementi = json_decode($json, false);//decodifica il contenuto JSON in un array
+
+        // Leggi il contenuto del file SQL
+        $sqlContent = file_get_contents('db.sql');
+
+        if ($sqlContent === false) {
+            die("Errore nella lettura del file SQL.");
         }
-        array_push($elementi, $elemento); //aggiunge un nuovo elemento all'arry
-        $json_dati = json_encode($elementi); //codifica l'array in formato json
-        file_put_contents('user.json', $json_dati); //scrive i dati json nel file
-        header("Location: login.php");//reidirizza alla pagina login.php
+
+        // Esegui tutte le query usando multi_query
+        if ($db->multi_query($sqlContent)) {
+            do {
+                // Questo ciclo processa tutti i risultati delle query
+                if ($result = $db->store_result()) {
+                    $result->free();
+                }
+            } while ($db->more_results() && $db->next_result());
+            echo "Il database è stato creato con successo.";
+        } else {
+            echo "Errore nell'esecuzione delle query: " . $db->error;
+        }
+
+        // Seleziona il database 'ecommerce-nieddu'
+        if (!$db->select_db("ecommerce-nieddu")) {
+            die("Selezione del database fallita: " . $db->error);
+        }
+        // Controlla la connessione
+        if ($db->connect_error) {
+            die("Connessione fallita: " . $db->connect_error);
+        }
+
+        // Recupera e sanifica (evita l'attacco SQL injection) i dati inviati tramite il form POST
+        $nome = $db->real_escape_string($_POST['nome']);
+        $cognome = $db->real_escape_string($_POST['cognome']);
+        $email = $db->real_escape_string($_POST['email']);
+        $password = $db->real_escape_string($_POST['password']);
+
+        // Costruisce la query di inserimento con concatenazione
+        $sql = "INSERT INTO `user` (`nome`, `cognome`, `e-mail`, `password`) VALUES ('$nome', '$cognome', '$email', '$password')";
+        $result = $db->query($sql);
+
+        // Esegue la query e verifica il risultato
+        if ($db->query($sql) === TRUE) {
+            echo "<p class='success-message'>Nuovo record inserito con successo</p>";
+            header("Location: login.php"); // Reindirizza alla pagina di login
+            exit(); // Termina lo script dopo il reindirizzamento
+        } else {
+            echo "<p class='error-message'>Errore nell'inserimento del record: " . $db->error . "</p>";
+        }
+
     }
     ?>
 
