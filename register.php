@@ -85,6 +85,7 @@
         <h4> EMAIL: </h4> <input type="email" name="email"><!-- Campo per inserire l'email -->
         <h4> PASSWORD: </h4> <input type="password" name="password"><br><br><!-- Campo per inserire a password -->
         <input type="submit" value="REGISTRA I TUOI DATI"> <!-- Pulsante per inviare i dati del form -->
+        <a href="login.php" class="button">vai alla pagina di accesso</a>
     </form>
 
     <?php
@@ -130,7 +131,6 @@
 
         // Costruisce la query di inserimento con concatenazione
         $sql = "INSERT INTO `user` (`nome`, `cognome`, `e-mail`, `password`) VALUES ('$nome', '$cognome', '$email', '$password')";
-        $result = $db->query($sql);
 
         // Esegue la query e verifica il risultato
         if ($db->query($sql) === TRUE) {
