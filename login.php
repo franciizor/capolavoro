@@ -150,7 +150,7 @@
     }
     if (isset($_POST['email']) && isset($_POST['password'])) //controlla se email e password sono stati inviati
     {
-        $email = $_POST['e-mail']; //prende l'email inviata
+        $email = $_POST['email']; //prende l'email inviata
         $password = $_POST['password']; //prende la password inviata
         foreach ($elementi as $elemento) { //controlla ogni utente registrato nel file JSON
             if ($elemento['email'] == $email && $elemento['password'] == $password) //controlla se email e password coincidono 

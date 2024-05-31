@@ -89,6 +89,7 @@
     </form>
 
     <?php
+    
     if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['email']) && isset($_POST['password'])) //controlla se nome, cognome,email e password sono stati inviati
     {
         $db = new mysqli("localhost", "root", "");
@@ -130,7 +131,7 @@
         $password = $db->real_escape_string($_POST['password']);
 
         // Costruisce la query di inserimento con concatenazione
-        $sql = "INSERT INTO `user` (`nome`, `cognome`, `e-mail`, `password`) VALUES ('$nome', '$cognome', '$email', '$password')";
+        $sql = "INSERT INTO `user` (`nome`, `cognome`, `email`, `password`) VALUES ('$nome', '$cognome', '$email', '$password')";
 
         // Esegue la query e verifica il risultato
         if ($db->query($sql) === TRUE) {
