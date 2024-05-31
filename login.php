@@ -82,7 +82,7 @@
 
     <h3>PAGINA DI LOGIN</h3>
     <form method="post" action="login.php" class="center"> <!--invia dati tramite POST a login.php -->
-        <h4> EMAIL: </h4> <input type="email" name="email"> <!-- Campo per inserire l'email -->
+        <h4> EMAIL: </h4> <input type="email" name="e-mail"> <!-- Campo per inserire l'email -->
         <h4> PASSWORD: </h4> <input type="password" name="password"><br><br> <!-- Campo per inserire la password -->
         <input type="submit" value="INVIA I TUOI DATI"> <!-- Pulsante per inviare i dati del form -->
     </form>
@@ -148,21 +148,21 @@
             $elementi[] = $row;
         }
     }
-    if (isset($_POST['email']) && isset($_POST['password'])) //controlla se email e password sono stati inviati
+    if (isset($_POST['e-mail']) && isset($_POST['password'])) //controlla se email e password sono stati inviati
     {
-        $email = $_POST['email']; //prende l'email inviata
+        $email = $_POST['e-mail']; //prende l'email inviata
         $password = $_POST['password']; //prende la password inviata
         foreach ($elementi as $elemento) { //controlla ogni utente registrato nel file JSON
-            if ($elemento['email'] == $email && $elemento['password'] == $password) //controlla se email e password coincidono 
+            if ($elemento['e-mail'] == $email && $elemento['password'] == $password) //controlla se email e password coincidono 
             {
                 session_start(); //avvia una sessione
-                $_SESSION['email'] = $email; //salva l'email nella sessione
+                $_SESSION['e-mail'] = $email; //salva l'email nella sessione
                 $_SESSION['carrello'] = []; //inizializza il carello vuoto
                 header("Location: profile.php"); //reidirizza alla pagina profile.php
                 exit;
             }
         }
-        echo "Errore: email e/o password errati";
+        echo "Errore: e-mail e/o password errati";
     }
     ?>
 </body>
