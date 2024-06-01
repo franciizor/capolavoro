@@ -72,10 +72,10 @@
     <div class="contenitore-prodotti">
         <?php
         session_start(); //inizia una sessione
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prodotto'])) // Controlla se il metodo di richiesta è POST e se 'id_prodotto' è stato inviato
+    // Controlla se il metodo di richiesta è POST e se 'id_prodotto' è stato inviato
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_prodotto'])) 
         {
-       // Crea un array prodotto con i dati inviati dal form         
+    // Crea un array prodotto con i dati inviati dal form         
             $product = [
                 'id' => $_POST['id_prodotto'],
                 'nome' => $_POST['nome'],
@@ -84,20 +84,15 @@
                 'immagine' => $_POST['immagine'],
                 'quantita' => $_POST['quantita']
             ];
-
             $_SESSION['carrello'][] = $product; // Aggiunge il prodotto all'array 'carrello' nella sessione
-
             header("Location: profile.php"); // Reindirizza l'utente alla pagina profile.php
             exit;
         }
-
         $json = 'prodotti.json'; // Nome del file JSON che contiene i dati dei prodotti
-
         $prodotti = []; // Inizializza un array vuoto per i prodotti
-
         if (file_exists($json)) // Controlla se il file prodotti.json esiste
         {
-            $prodotti = json_decode(file_get_contents($json), true);  // Legge il contenuto del file JSON e lo decodifica in un array associativo
+            $prodotti = json_decode(file_get_contents($json), true); // Legge il contenuto del file JSON e lo decodifica in un array associativo
             foreach ($prodotti as $prodotto) 
             {
                 echo "<div class='prodotto'>";
@@ -119,7 +114,6 @@
         }
         ?>
     </div>
-
     <div class="bottoni-fondo">
         <a href='carrello.php'><button>CARRELLO</button></a> <br> <br>
         <a href='login.php'><button>LOGOUT</button></a>

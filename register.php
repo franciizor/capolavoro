@@ -78,7 +78,6 @@
 <body>
 
     <h3>PAGINA DI REGISTRAZIONE</h3>
-
     <form method="post" action="register.php" class="center"> <!--invia dati tramite POST a register.php -->
         <h4> NOME: </h4> <input type="text" name="nome"><!-- Campo per inserire il nome -->
         <h4> COGNOME: </h4> <input type="text" name="cognome"><!-- Campo per inserire il cognome -->
@@ -89,19 +88,16 @@
     </form>
 
     <?php
-    if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['email']) && isset($_POST['password'])) //controlla se nome, cognome,email e password sono stati inviati
+   //controlla se nome, cognome,email e password sono stati inviati 
+    if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['email']) && isset($_POST['password'])) 
     {
         $db = new mysqli("localhost", "root", "");
-
-
-        // Leggi il contenuto del file SQL
+    // Leggi il contenuto del file SQL
         $sqlContent = file_get_contents('db.sql');
-
         if ($sqlContent === false) {
             die("Errore nella lettura del file SQL.");
         }
-
-        // Esegui tutte le query usando multi_query
+    // Esegui tutte le query usando multi_query
         if ($db->multi_query($sqlContent)) {
             do {
                 // Questo ciclo processa tutti i risultati delle query
@@ -113,26 +109,22 @@
         } else {
             echo "Errore nell'esecuzione delle query: " . $db->error;
         }
-
-        // Seleziona il database 'ecommerce-nieddu'
+    // Seleziona il database 'ecommerce-nieddu'
         if (!$db->select_db("ecommerce-nieddu")) {
             die("Selezione del database fallita: " . $db->error);
         }
-        // Controlla la connessione
+    // Controlla la connessione
         if ($db->connect_error) {
             die("Connessione fallita: " . $db->connect_error);
         }
-
-        // Recupera e sanifica (evita l'attacco SQL injection) i dati inviati tramite il form POST
+    // Recupera e sanifica (evita l'attacco SQL injection) i dati inviati tramite il form POST
         $nome = $db->real_escape_string($_POST['nome']);
         $cognome = $db->real_escape_string($_POST['cognome']);
         $email = $db->real_escape_string($_POST['email']);
         $password = $db->real_escape_string($_POST['password']);
-
-        // Costruisce la query di inserimento con concatenazione
+    // Costruisce la query di inserimento con concatenazione
         $sql = "INSERT INTO `user` (`nome`, `cognome`, `e-mail`, `password`) VALUES ('$nome', '$cognome', '$email', '$password')";
-
-        // Esegue la query e verifica il risultato
+    // Esegue la query e verifica il risultato
         if ($db->query($sql) === TRUE) {
             echo "<p class='success-message'>Nuovo record inserito con successo</p>";
             header("Location: login.php"); // Reindirizza alla pagina di login

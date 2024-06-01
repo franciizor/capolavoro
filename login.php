@@ -75,6 +75,17 @@
         .button:hover {
             background-color: #0056b3;
         }
+        .register-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .register-container p {
+            margin: 0;
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -86,38 +97,34 @@
         <h4> PASSWORD: </h4> <input type="password" name="password"><br><br> <!-- Campo per inserire la password -->
         <input type="submit" value="INVIA I TUOI DATI"> <!-- Pulsante per inviare i dati del form -->
     </form>
-    <p>NUOVO ACCOUNT?</p>
-    <a href="register.php" class="button">REGISTRATI</a> <!-- Link alla pagina di registrazione -->
+    <div class="register-container">
+        <p>NUOVO ACCOUNT?</p>
+        <a href="register.php" class="button">REGISTRATI</a>
+    </div>
     <?php
     session_start(); //avvia sessione
-    //GESTIONE DELLA DISCONNESIONE UTENTE
+ //GESTIONE DELLA DISCONNESIONE UTENTE
     if (isset($_GET['logout'])) //controlla se l'utente vuole disconnettersi
     {
         session_destroy(); //termina sessione
         header("Location: login.php"); //reidirizza alla pagina login
         exit; //ferma l'esecuzione dello script
     }
-
-    // Localhost: indirizzo locale
-    // root: utente default del DB (per ora non modificato)
-    // password è vuota ""
-    // ecommerce-nieddu è il nome del database
-    $db = new mysqli("localhost", "root", "");
-
-    // Controlla la connessione
+// Localhost: indirizzo locale
+// root: utente default del DB (per ora non modificato)
+// password è vuota ""
+// ecommerce-nieddu è il nome del database
+    $db = new mysqli("localhost", "root", "", "ecommerce-nieddu");
+// Controlla la connessione
     if ($db->connect_error) {
         die("Connessione fallita: " . $db->connect_error);
     }
-
-
-    // Leggi il contenuto del file SQL
+// Leggi il contenuto del file SQL
     $sqlContent = file_get_contents('db.sql');
-
     if ($sqlContent === false) {
         die("Errore nella lettura del file SQL.");
     }
-
-    // Esegui tutte le query usando multi_query
+// Esegui tutte le query usando multi_query
     if ($db->multi_query($sqlContent)) {
         do {
             // Questo ciclo processa tutti i risultati delle query
@@ -129,20 +136,16 @@
     } else {
         echo "Errore nell'esecuzione delle query: " . $db->error;
     }
-
-    // Seleziona il database 'ecommerce-nieddu'
+// Seleziona il database 'ecommerce-nieddu'
     if (!$db->select_db("ecommerce-nieddu")) {
         die("Selezione del database fallita: " . $db->error);
     }
-    // Query per ottenere i dati dalla tabella 'user'
+// Query per ottenere i dati dalla tabella 'user'
     $sql = "SELECT * FROM user";
     $result = $db->query($sql);
-
-    // Creazione di un array per contenere i dati
+// Creazione di un array per contenere i dati
     $elementi = array();
-
     if ($result->num_rows > 0) {
-
         // Itera attraverso i risultati e aggiungili all'array
         while ($row = $result->fetch_assoc()) {
             $elementi[] = $row;
@@ -168,3 +171,4 @@
 </body>
 
 </html>
+

@@ -1,11 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>My PHP Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto PHP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My PHP Page</h1>
-    <p>Click the link below to view the PHP page:</p>
-    <a href="login.php">Go to PHP Page</a>
+    <div class="container">
+        <h1>Benvenuti</h1>
+        <p>Il progetto realizzato è un sito web che consente agli utenti di registrarsi, effettuare il login, scegliere prodotti da acquistare, e visualizzare un riepilogo del loro ordine con il prezzo totale.</p>
+        <p>Si può accedere solo in locale con l'aiuto di XAMPP, attivando Apache e MySQL.</p>
+        <p>Cliccando qui sotto, verranno scaricati i file necessari:</p>
+        <a href="login.php" download>Scarica i file</a>
+    </div>
 </body>
 </html>
